@@ -1,29 +1,29 @@
+import logging
 from langchain_text_splitters import MarkdownHeaderTextSplitter
 from langchain_milvus.vectorstores import Milvus
 from langchain_community.llms import Ollama
-from langchain_community.document_loaders import DirectoryLoader
-from langchain_community.document_loaders import TextLoader
-
+from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_community.embeddings import OllamaEmbeddings
-
-
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
-
 from langchain.callbacks.manager import CallbackManager
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+from langchain import hub
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 OLLAMA_SERVER_URL = "http://localhost:7869"
 EMBEDDING_MODEL = "nomic-embed-text"
 # EMBEDDING_MODEL="mxbai-embed-large"
 
 def main():
+    logger.info("Starting the document loading process...")
     loader = DirectoryLoader('../embedding/docs', glob="**/*.md", show_progress=True, loader_cls=TextLoader)
     docs = loader.load()
 
-    # print(docs[:5])
-
-
+    logger.info("Loaded documents: %d", len(docs))
 
     headers_to_split_on = [
         ("#", "Header1"),
@@ -39,27 +39,20 @@ def main():
     for docu in docs:
         md_header_splits.extend(markdown_splitter.split_text(docu.page_content))
 
-    # Split
+    logger.info("Splitting documents by headers...")
+
     from langchain.text_splitter import RecursiveCharacterTextSplitter
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size = 500, chunk_overlap = 0, add_start_index=True)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=0, add_start_index=True)
     docs = text_splitter.split_documents(docs)
 
-    # embedding
+    logger.info("Splitting documents by characters...")
 
-    embeddings = (
-        OllamaEmbeddings(model=EMBEDDING_MODEL, base_url = OLLAMA_SERVER_URL )
-    )
-
+    embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL, base_url=OLLAMA_SERVER_URL)
     query_result = embeddings.embed_query(str(docs[0]))
 
-    # print(query_result[:5])
+    logger.info("Embedding query results: %s", query_result[:5])
 
-
-    # The easiest way is to use Milvus Lite where everything is stored in a local file.
-    # If you have a Milvus server you can use the server URI such as "http://localhost:19530".
-    # URI = "./milvus_demo.db"
     MILVUS_CLUSTER_URL = "http://localhost:19530"
-
     vector_db = Milvus.from_documents(
         docs,
         embeddings,
@@ -68,30 +61,22 @@ def main():
         drop_old=True,  # Drop the old Milvus collection if it exists
     )
 
-    # query = "Les congés pour événements familiaux et le congé de deuil"
-    # docs = vector_db.similarity_search(query)
-    #
-    # print(docs[:5])
+    logger.info("Created Milvus vector store")
 
-    # RAG prompt
-    from langchain import hub
     prompt = hub.pull("rlm/rag-prompt-mistral")
-
-    # LLM
-    llm = Ollama(model="mistral", # llama2-uncensored
+    llm = Ollama(model="mistral",  # llama2-uncensored
                  verbose=True,
                  base_url=OLLAMA_SERVER_URL)
 
-    print(f"Loaded LLM model {llm.model}")
+    logger.info(f"Loaded LLM model {llm.model}")
 
     def format_docs(docs):
         return "\n\n".join(doc.page_content for doc in docs)
 
     retriever = vector_db.as_retriever(search_type="similarity", search_kwargs={"k": 6})
-
     retrieved_docs = retriever.invoke("De quel convention parle t'on?")
 
-    len(retrieved_docs)
+    logger.info("Retrieved %d documents", len(retrieved_docs))
 
     rag_chain = (
             {"context": retriever | format_docs, "question": RunnablePassthrough()}
@@ -100,11 +85,10 @@ def main():
             | StrOutputParser()
     )
 
-    # Ask a question
+    question = "De quel convention parle t'on? "
+    logger.info("Asking question: %s", question)
 
-    question = f"De quel convention parle t'on? "
-    # rag_chain.invoke(question)
-
+    logger.info("Assistant response: %s", question)
     for chunk in rag_chain.stream(question):
         print(chunk, end="", flush=True)
 
