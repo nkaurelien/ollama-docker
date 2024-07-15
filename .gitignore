@@ -4,3 +4,5 @@ venv/
 ollama/
 *.gguf
 *.ggml
+volumes/
+apps/embedding/docs/

@@ -2,9 +2,16 @@ fastapi
 uvicorn
 debugpy
 langchain-community
+langchain-experimental
 langchain
 langchainhub
 gpt4all
 chromadb
 requests
 beautifulsoup4
+langchain
+langchain_milvus
+langchain-text-splitters
+unstructured
+unstructured[md]
+tqdm
