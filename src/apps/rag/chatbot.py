@@ -46,7 +46,7 @@ def rag_prompt_mistral_build():
     # Assistant:"""
 
     PROMPT_TEMPLATE = """
-    <s> [INST] You are an assistant for question-answering tasks. Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you don't know. Use three sentences maximum and keep the answer concise. [/INST] </s> 
+    <s> [INST] Vous êtes un assistant pour les tâches de réponse aux questions. Utilisez les éléments suivants du contexte récupéré pour répondre à la question. Si vous ne connaissez pas la réponse, dites simplement que vous ne savez pas. Utilisez trois phrases maximum et soyez concis. [/INST] </s> 
 
     [INST] Question: {question} 
     
@@ -109,23 +109,31 @@ def init_connection():
         collection_name="syntheses_conventions_collectives",
         drop_old=True,  # Drop the old Milvus collection if it exists
     )
+    logger.info(f"Vector DB initialized and Data imported.")
 
-    llm = Ollama(model="mistral",  # llama2-uncensored
+
+    logger.info("Initializing vector database...")
+    model="mistral"
+    llm = Ollama(model=model,  # llama2-uncensored
                  verbose=True,
                  base_url=OLLAMA_SERVER_URL)
-    logger.info(f"Connected to Ollama.")
+    logger.info(f"Connected to Ollama and {model} loaded")
 
     return vector_db, llm
 
 
 def main(vector_db, llm):
-    st.title("RAG Chatbot")
-    st.write("Ask a question about the conventions:")
+    st.title("RAG Chatbot 🤖")
+    st.write("Posez une question sur les conventions:")
     # st.write(DOC_DIR)
+
+    with st.chat_message('assistant'):
+        st.markdown("Hello 👋🏿, je vous ecoute")
 
     # Initialize chat history
     if "messages" not in st.session_state:
         st.session_state.messages = []
+
 
     # Display chat messages from history on app rerun
     for message in st.session_state.messages:

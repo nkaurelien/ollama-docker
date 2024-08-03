@@ -65,6 +65,11 @@ Visit [http://localhost:8000](http://localhost:8000) in your browser to access O
 
 Navigate to settings -> model and install a model (e.g., llava-phi3). This may take a couple of minutes, but afterward, you can use it just like ChatGPT.
 
+```bash
+docker compose exec ollama ollama pull mistral
+docker compose exec ollama ollama pull nomic-embed-text
+```
+
 ### Explore Langchain and Ollama
 
 You can explore Langchain and Ollama within the project. A third container named **app** has been created for this purpose. Inside, you'll find some examples.
