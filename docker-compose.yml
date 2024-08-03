@@ -29,6 +29,7 @@ services:
       - ollama
       # - ollama-webui
       - milvus
+      - redis
     networks:
       - ollama-docker
 
@@ -44,6 +45,18 @@ services:
       - ollama
       # - ollama-webui
       - milvus
+    networks:
+      - ollama-docker
+
+  redis:
+    image: "redis:6.2-alpine"
+    container_name: "redis-server-standalone"
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    volumes:
+      - cache:/data
     networks:
       - ollama-docker
 
@@ -185,10 +198,12 @@ services:
     networks:
       - ollama-docker
 
-#volumes:
+volumes:
 #  etcd-data:
 #  minio-data:
 #  milvus-data:
+  cache:
+    driver: local
 
 networks:
   ollama-docker:

@@ -6,7 +6,6 @@ langchain-community
 langchain-experimental
 langchainhub
 gpt4all
-chromadb
 requests
 beautifulsoup4
 langchain_milvus
@@ -15,3 +14,4 @@ unstructured
 unstructured[md]
 tqdm
 streamlit
+redis

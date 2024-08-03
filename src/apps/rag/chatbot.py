@@ -10,7 +10,10 @@ from langchain_community.document_loaders import TextLoader
 from langchain_community.embeddings import OllamaEmbeddings
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
+from langchain_community.cache import RedisCache
+from redis import Redis
 
+set_llm_cache(RedisCache(redis_=Redis(host='redis', port=6379, db=0)))
 import multiprocessing as mp
 mp.set_start_method("spawn", force=True)
 
@@ -28,24 +31,8 @@ DOC_DIR = os.path.join(os.getcwd(), 'src/docs')
 from langchain_core.prompts import PromptTemplate
 
 def rag_prompt_mistral_build():
-    # Define the prompt template for generating AI responses
-    # PROMPT_TEMPLATE = """
-    # Human: You are an AI assistant, and provides answers to questions by using fact based and statistical information when possible.
-    # Use the following pieces of information to provide a concise answer to the question enclosed in <question> tags.
-    # If you don't know the answer, just say that you don't know, don't try to make up an answer.
-    # <context>
-    # {context}
-    # </context>
-    # 
-    # <question>
-    # {question}
-    # </question>
-    # 
-    # The response should be specific and use statistics or numbers when possible.
-    # 
-    # Assistant:"""
 
-    PROMPT_TEMPLATE = """
+    prompt_template = """
     <s> [INST] Vous êtes un assistant pour les tâches de réponse aux questions. Utilisez les éléments suivants du contexte récupéré pour répondre à la question. Si vous ne connaissez pas la réponse, dites simplement que vous ne savez pas. Utilisez trois phrases maximum et soyez concis. [/INST] </s> 
 
     [INST] Question: {question} 
@@ -57,7 +44,7 @@ def rag_prompt_mistral_build():
 
     # Create a PromptTemplate instance with the defined template and input variables
     prompt = PromptTemplate(
-        template=PROMPT_TEMPLATE, input_variables=["context", "question"]
+        template=prompt_template, input_variables=["context", "question"]
     )
     # logger.info(f"LANGCHAIN_API_KEY={os.getenv('LANGCHAIN_API_KEY')}")
     # prompt = hub.pull("rlm/rag-prompt-mistral")
@@ -128,7 +115,7 @@ def main(vector_db, llm):
     # st.write(DOC_DIR)
 
     with st.chat_message('assistant'):
-        st.markdown("Hello 👋🏿, je vous ecoute")
+        st.markdown("Hello 👋🏿, Que voulez vous savoir?")
 
     # Initialize chat history
     if "messages" not in st.session_state:
@@ -151,33 +138,24 @@ def main(vector_db, llm):
         def format_docs(docs):
             return "\n\n".join(doc.page_content for doc in docs)
 
-        retriever = vector_db.as_retriever(search_type="similarity", search_kwargs={"k": 6})
         # retrieved_docs = retriever.invoke(query)
-        #
         # logger.info(f"Retrieved {len(retrieved_docs)} documents.")
 
 
-        prompt = rag_prompt_mistral_build()
-        response_text = ""
-
         with st.spinner("Processing..."):
+            retriever = vector_db.as_retriever(search_type="similarity", search_kwargs={"k": 6})
+            prompt = rag_prompt_mistral_build()
             rag_chain = (
                     {"context": retriever | format_docs, "question": RunnablePassthrough()}
                     | prompt
                     | llm
                     | StrOutputParser()
             )
+            response_text = rag_chain.invoke(query)
 
-            # response_area = st.empty()
-
-                # Add user message to chat history
-            for chunk in rag_chain.stream(query):
-                response_text += chunk
-                # response_area.text(response_text)
-
-        with st.chat_message("assistant"):
-            st.markdown(response_text)
-        st.session_state.messages.append({"role": "assistant", "content": response_text})
+            with st.chat_message("assistant"):
+                st.markdown(response_text)
+            st.session_state.messages.append({"role": "assistant", "content": response_text})
 
 
 if __name__ == "__main__":
