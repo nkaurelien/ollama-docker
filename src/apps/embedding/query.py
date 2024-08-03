@@ -1,7 +1,4 @@
 
-from .RAGHandler import RAGHandler
-# embedding
-
 from langchain_community.embeddings import OllamaEmbeddings
 import json
 from pymilvus import MilvusClient
@@ -14,13 +11,13 @@ client = MilvusClient(
 )
 
 EMBEDDING_MODEL="nomic-embed-text"
-OLLAMA_SERVER_URL="http://localhost:7869"
+OLLAMA_SERVER_URL="http://localhost:11434"
 
 embeddings = (
     OllamaEmbeddings(model=EMBEDDING_MODEL, base_url = OLLAMA_SERVER_URL )
 )
 
-query = "Essai et préavis"
+query = "de quel convention parle t-on?"
 
 query_embedding = embeddings.embed_query(query)
 

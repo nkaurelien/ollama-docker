@@ -10,18 +10,20 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from langchain.callbacks.manager import CallbackManager
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
-
+import os
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-OLLAMA_SERVER_URL = "http://localhost:7869"
+OLLAMA_SERVER_URL = "http://localhost:11434"
 EMBEDDING_MODEL = "nomic-embed-text"
 # EMBEDDING_MODEL="mxbai-embed-large"
 
 def load_docs():
+    doc_dir = os.path.join(os.getcwd(), 'src/docs')
+
     logger.info("Loading documents...")
-    loader = DirectoryLoader('../embedding/docs', glob="**/*.md", show_progress=True, loader_cls=TextLoader)
+    loader = DirectoryLoader(doc_dir, glob="**/*.md", show_progress=True, loader_cls=TextLoader)
     docs = loader.load()
     logger.info(f"Loaded {len(docs)} documents.")
     return docs

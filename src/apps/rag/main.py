@@ -14,13 +14,13 @@ from langchain import hub
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-OLLAMA_SERVER_URL = "http://localhost:7869"
+OLLAMA_SERVER_URL = "http://localhost:11434"
 EMBEDDING_MODEL = "nomic-embed-text"
 # EMBEDDING_MODEL="mxbai-embed-large"
 
 def main():
     logger.info("Starting the document loading process...")
-    loader = DirectoryLoader('../embedding/docs', glob="**/*.md", show_progress=True, loader_cls=TextLoader)
+    loader = DirectoryLoader('../../docs', glob="**/*.md", show_progress=True, loader_cls=TextLoader)
     docs = loader.load()
 
     logger.info("Loaded documents: %d", len(docs))
@@ -57,7 +57,7 @@ def main():
         docs,
         embeddings,
         connection_args={"uri": MILVUS_CLUSTER_URL},
-        collection_name="syntheses_conventions_collectives",
+        collection_name="rag_data",
         drop_old=True,  # Drop the old Milvus collection if it exists
     )
 

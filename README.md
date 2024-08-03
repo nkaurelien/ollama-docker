@@ -1,7 +1,7 @@
 # Ollama Docker Compose Setup
 
 Welcome to the Ollama Docker Compose Setup! This project simplifies the deployment of Ollama using Docker Compose, making it easy to run Ollama with all its dependencies in a containerized environment.
-[![Star History Chart](https://api.star-history.com/svg?repos=valiantlynx/ollama-docker&type=Date)](https://star-history.com/#valiantlynx/ollama-docker&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=nkaurelien/ollama-docker&type=Date)](https://star-history.com/#nkaurelien/ollama-docker&Date)
 
 ## Getting Started
 
@@ -11,7 +11,7 @@ Make sure you have the following prerequisites installed on your machine:
 - Docker
 - Docker Compose
 
-#### GPU Support (Optional)
+#### GPU Support (Optional) (Preferred)
 
 If you have a GPU and want to leverage its power within a Docker container, follow these steps to install the NVIDIA Container Toolkit:
 
@@ -36,7 +36,7 @@ docker run --gpus all nvidia/cuda:11.5.2-base-ubuntu20.04 nvidia-smi
 1. Clone the Docker Compose repository:
 
     ```bash
-    git clone https://github.com/valiantlynx/ollama-docker.git
+    git clone https://github.com/nkaurelien/ollama-docker.git
     ```
 
 2. Change to the project directory:
@@ -92,6 +92,6 @@ This project is licensed under the [MIT License](LICENSE). Feel free to use, mod
 
 ## Contact
 
-If you have any questions or concerns, please contact us at [vantlynxz@gmail.com](mailto:vantlynxz@gmail.com).
+If you have any questions or concerns, please contact us at [nkaurelien@gmail.com](mailto:nkaurelien@gmail.com).
 
 Enjoy using Ollama with Docker Compose! 🐳🚀

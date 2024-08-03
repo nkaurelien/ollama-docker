@@ -1,4 +1,4 @@
-import pprint
+import os
 # Load docs
 # from langchain.document_loaders import WebBaseLoader
 # # loader = WebBaseLoader("https://www.smartdatapay.com/conventions/KALICONT000005635624.html")
@@ -9,7 +9,10 @@ import pprint
 
 from langchain_community.document_loaders import DirectoryLoader
 from langchain_community.document_loaders import TextLoader
-loader = DirectoryLoader('docs', glob="**/*.md", show_progress=True, loader_cls=TextLoader)
+
+DOC_DIR = os.path.join(os.getcwd() ,'src/docs')
+
+loader = DirectoryLoader(DOC_DIR, glob="**/*.md", show_progress=True, loader_cls=TextLoader)
 docs = loader.load()
 
 # print(docs[:5])
@@ -20,7 +23,7 @@ docs = loader.load()
 from langchain_community.embeddings import OllamaEmbeddings
 
 EMBEDDING_MODEL="nomic-embed-text"
-OLLAMA_SERVER_URL="http://localhost:7869"
+OLLAMA_SERVER_URL="http://localhost:11434"
 # EMBEDDING_MODEL="mxbai-embed-large"
 
 embeddings = (

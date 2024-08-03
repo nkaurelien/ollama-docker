@@ -9,7 +9,7 @@
   <script src="https://unpkg.com/htmx.org"></script>
   <script src="https://unpkg.com/htmx.org/dist/ext/client-side-templates.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/nunjucks@3.2.4/browser/nunjucks.min.js"></script>
-  <title>Auto Ollama Docker Compose Setup</title>
+  <title>Ollama Docker Compose Setup</title>
 </head>
 
 <body class="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 font-sans h-screen">
@@ -21,7 +21,7 @@
         <ul class="flex space-x-4">
           <li><a href="/" class="hover:text-gray-300 text-white">Home</a></li>
           <li><a href="#features" class="hover:text-gray-300 text-white">Features</a></li>
-          <li><a href="/apps/embedding/docs" class="hover:text-gray-300 text-white">Docs</a></li>
+          <li><a href="/src/docs" class="hover:text-gray-300 text-white">Docs</a></li>
         </ul>
       </nav>
     </div>
@@ -32,9 +32,11 @@
       <h2 class="text-4xl lg:text-5xl font-semibold mb-4">Simplify Your Development with Ollama Docker</h2>
       <p class="text-lg lg:text-xl text-gray-300 leading-7 mb-8">Streamline your Ollama deployments using Docker Compose. Dive into a containerized environment designed for simplicity and efficiency.</p>
       <div class="space-x-4">
-        <a href="http://localhost:8080" class="bg-blue-500 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition duration-300">Ollama Web UI</a>
-        <a href="http://localhost:11434" class="bg-green-500 text-white px-8 py-3 rounded-full hover:bg-green-700 transition duration-300">Ollama</a>
-        <a href="http://localhost:8000" class="bg-red-500 text-white px-8 py-3 rounded-full hover:bg-red-700 transition duration-300">App Container</a>
+        <a href="http://localhost:8080" target="_blank" class="bg-blue-500 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition duration-300">Ollama Web UI</a>
+<!--        <a href="http://localhost:11434" target="_blank" class="bg-green-500 text-white px-8 py-3 rounded-full hover:bg-green-700 transition duration-300">Ollama</a>-->
+        <a href="http://localhost:11434" target="_blank" class="bg-green-500 text-white px-8 py-3 rounded-full hover:bg-green-700 transition duration-300">Ollama</a>
+        <a href="http://localhost:8501" class="bg-green-500 text-white px-8 py-3 rounded-full hover:bg-red-700 transition duration-300">RAG Chatbot Container</a>
+        <a href="http://localhost:8502" class="bg-green-500 text-white px-8 py-3 rounded-full hover:bg-red-700 transition duration-300">RAG App Container</a>
       </div>
     </div>
   </section>

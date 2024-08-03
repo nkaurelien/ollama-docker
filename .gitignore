@@ -5,4 +5,5 @@ ollama/
 *.gguf
 *.ggml
 volumes/
-apps/embedding/docs/
+src/docs/
+.env
