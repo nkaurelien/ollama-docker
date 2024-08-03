@@ -5,5 +5,5 @@ ollama/
 *.gguf
 *.ggml
 volumes/
-src/docs/
+#src/docs/
 .env
