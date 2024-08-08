@@ -10,10 +10,6 @@ from langchain_community.document_loaders import TextLoader
 from langchain_community.embeddings import OllamaEmbeddings
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
-from langchain_community.cache import RedisCache
-from redis import Redis
-
-set_llm_cache(RedisCache(redis_=Redis(host='redis', port=6379, db=0)))
 import multiprocessing as mp
 mp.set_start_method("spawn", force=True)
 
