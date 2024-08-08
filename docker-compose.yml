@@ -1,21 +1,7 @@
 services:
-  app:
-    build: .
-    ports:
-      - "8000:8000"
-      - "5678:5678"
-    volumes:
-      - .:/code
-    command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
-    restart: always
-    depends_on:
-      - ollama
-      # - ollama-webui
-      - milvus
-    networks:
-      - ollama-docker
 
   chatbot:
+    container_name: "app-rag-chatbot"
     build: .
     ports:
       - "8501:8501"
@@ -27,12 +13,12 @@ services:
     restart: always
     depends_on:
       - ollama
-      # - ollama-webui
       - milvus
     networks:
       - ollama-docker
 
   rag:
+    container_name: "app-rag-question-answer"
     build: .
     ports:
       - "8502:8501"
@@ -42,7 +28,6 @@ services:
     restart: always
     depends_on:
       - ollama
-      # - ollama-webui
       - milvus
     networks:
       - ollama-docker
@@ -68,28 +53,6 @@ services:
 #            - driver: nvidia
 #              count: 1
 #              capabilities: [gpu]
-    networks:
-      - ollama-docker
-
-  ollama-webui:
-    image: ghcr.io/open-webui/open-webui:main
-    container_name: ollama-webui
-    volumes:
-      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/ollama-webui:/app/backend/data
-    depends_on:
-      - ollama
-    ports:
-      - "8080:8080"
-    environment: # https://docs.openwebui.com/getting-started/env-configuration#default_models
-      - OLLAMA_BASE_URLS=http://ollama:11434 #comma separated ollama hosts
-      - ENV=dev
-      - WEBUI_AUTH=False
-      - WEBUI_NAME=MY LAW AI
-      - WEBUI_URL=http://localhost:8080
-      - WEBUI_SECRET_KEY=t0p-s3cr3t
-    extra_hosts:
-      - host.docker.internal:host-gateway
-    restart: unless-stopped
     networks:
       - ollama-docker
 
