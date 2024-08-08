@@ -94,7 +94,11 @@ docker compose -f docker-compose.yml -f docker-compo
 se-webadmin.yml up attu -d
 ```
 
+## Links
 
+- [Powerpoint presentation](https://docs.google.com/presentation/d/18R9XPGP-rDguz3WXDspLL12kYx9648pusJM5uApxdBw/edit?usp=sharing)
+- [Massive Text Embedding Benchmark (MTEB) Leaderboard.](https://huggingface.co/spaces/mteb/leaderboard)
+- 
 
 ## Contributing
 
