@@ -1,7 +1,6 @@
 # Ollama Docker Compose Setup
 
 Welcome to the Ollama Docker Compose Setup! This project simplifies the deployment of Ollama using Docker Compose, making it easy to run Ollama with all its dependencies in a containerized environment.
-[![Star History Chart](https://api.star-history.com/svg?repos=nkaurelien/ollama-docker&type=Date)](https://star-history.com/#nkaurelien/ollama-docker&Date)
 
 ## Getting Started
 
@@ -51,12 +50,12 @@ Start Ollama and its dependencies using Docker Compose:
 
 if gpu is configured
 ```bash
-docker-compose -f docker-compose-ollama-gpu.yaml up -d
+docker compose -f docker-compose-ollama-gpu.yaml up -d
 ```
 
 else
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 Visit [http://localhost:8000](http://localhost:8000) in your browser to access Ollama-webui.
@@ -83,8 +82,19 @@ if you have vs code and the `Remote Development´ extension simply opening this 
 To stop the containers and remove the network:
 
 ```bash
-docker-compose down
+docker compose down
 ```
+Or (removing images)
+```bash
+docker compose down --rmi all
+```
+### Start a web  ui
+```bash
+docker compose -f docker-compose.yml -f docker-compo
+se-webadmin.yml up attu -d
+```
+
+
 
 ## Contributing
 

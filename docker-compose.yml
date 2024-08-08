@@ -83,19 +83,6 @@ services:
     networks:
       - ollama-docker
 
-  attu:
-    image: zilliz/attu:dev
-    container_name: milvus-wedamin
-    ports:
-      - "9100:3000"
-#    volumes:
-#      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/attu:/app/tls
-    environment:
-      - ATTU_LOG_LEVEL=info
-      - HOST_URL=http://localhost:9100
-      - MILVUS_URL=http://milvus:19530
-    networks:
-      - ollama-docker
 
   minio:
     container_name: milvus-minio
