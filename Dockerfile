@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM bitnami/python:latest
 
 WORKDIR /code 
 
